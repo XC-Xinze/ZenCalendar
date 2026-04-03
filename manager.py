@@ -19,28 +19,17 @@ class CalManager:
                         json.dump(all_data,f, ensure_ascii=False, indent=4)
                 print("data saved.")
 
-        def find_events_id(self, event_id):
-                for event in self.event:
-                        if str(event.id) == str(event_id):
-                                return event
+        def find_items_id(self,item_list, item_id):
+                for item in item_list:
+                        if str(item.id) == str(item_id):
+                                return item
                 return None
 
-        def find_events_id(self, event_id):
-                for event in self.event:
-                        if str(event.id) == str(event_id):
-                                return event 
-                return None
-        
-        def find_tasks_id(self, task_id):
-                for task in self.task:
-                        if str(task.id) == str(task_id):
-                                return task
-                return None
 
-        def delete_task_item(self, task_id):
-                for task in self.task:
-                        if str(task.id) == str(task_id):
-                                self.task.remove(task)
+        def delete_id_item(self, item_list, item_id):
+                for item in item_list:
+                        if str(item.id) == str(item_id):
+                                self.task.remove(item)
                                 self.save()
                                 return True
                 return False
