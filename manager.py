@@ -19,10 +19,11 @@ class CalManager:
                 try:
                         with open(self.filename, 'r', encoding='utf-8') as f:
                                 content = f.read()
+                                # read return a string
                                 if not content:
                                         return
-                                dict = json.load(f)
-                                for item in dict.get("Events", []):
+                                dictdata = json.loads(content)
+                                for item in dictdata.get("Events", []):
                                         CalEvent(
                                                 title=item['title'],
                                                 description=item['description'],
@@ -31,7 +32,7 @@ class CalManager:
                                                 end_time = item['end_time'],
                                                 uid = item['uid']
                                         )
-                                for item in dict.get('Tasks',[]):
+                                for item in dictdata.get('Tasks',[]):
                                         temp_task = CalTask(
                                                 title=item['title'],
                                                 description=item['description'],
@@ -49,8 +50,7 @@ class CalManager:
                         shutil.move(self.filename, backup_name)
                         print(f"Backup file:{backup_name}")
                         self.event.clear()
-                        self.task.clear()
-                        self.save()
+
         def save(self):
                 all_data = {
                         "Events": [event.to_dict() for event in CalEvent.CalEvent_list],
@@ -105,3 +105,11 @@ class CalManager:
                         print("==== Tasks ====")
                         for i, item in enumerate(results_task):
                                 print(f"{i+1}: {item.title}")
+        @staticmethod
+        def is_date_valid(date_str):
+                try:
+                        datetime.strptime(date_str, "%Y%m%d")
+                        return True
+                except ValueError:
+                        return False
+                

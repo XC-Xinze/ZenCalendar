@@ -1,5 +1,18 @@
 import components
 import manager
+import datetime
+from datetime import datetime, timedelta
+
+def get_user_date(date_type = None):
+        while True:
+                user_input = input(f"{date_type}:YYYYMMDD or press Enter for today:").strip()
+
+                if not user_input:
+                        return datetime.now().strftime("%Y%m%d")
+                if manager.is_date_valid(user_input):
+                        return user_input
+                else:
+                        print("Wrong format of date.")
 
 manager = manager.CalManager()
 manager.load()
@@ -10,15 +23,15 @@ while True:
         if choice == '1':
                 title = input("Input title:")
                 description = input("Input description:")
-                custom_date = input("Input date:")
+                custom_date = get_user_date("Target time")
                 components.CalTask(title,description,custom_date, uid=None)
                 manager.save()
         elif choice == '2':
                 title = input("Input title:")
                 description = input("Input description:")
-                custom_date = input("Input date:")
-                start_time = input("Start time:")
-                end_time = input("End time:")
+                custom_date = get_user_date("Target time") 
+                start_time = get_user_date("Start time") 
+                end_time = get_user_date("End time")
                 components.CalEvent(title,description,custom_date, start_time,end_time,uid = None)
                 manager.save()
         elif choice == '3':
