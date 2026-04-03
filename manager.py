@@ -1,4 +1,7 @@
 import json
+import shutil
+import datetime
+from datetime import datetime
 import components
 from components import CalEvent, CalTask
 
@@ -15,6 +18,9 @@ class CalManager:
                 CalTask.CalTask_list.clear()
                 try:
                         with open(self.filename, 'r', encoding='utf-8') as f:
+                                content = f.read()
+                                if not content:
+                                        return
                                 dict = json.load(f)
                                 for item in dict.get("Events", []):
                                         CalEvent(
@@ -35,8 +41,16 @@ class CalManager:
                                         temp_task.is_completed = item['is_completed']
                                 print("Load Success")
                 except FileNotFoundError:
-                        print("No Such file")
-
+                        print("No Such file. Create initial calendar.")
+                except (json.JSONDecodeError, KeyError,ValueError) as e:
+                        print(f"Saved calendar is ruined because of {e}. Backup for you and create new calendar.")
+                        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+                        backup_name = f"backup_corrupted_{timestamp}.json"
+                        shutil.move(self.filename, backup_name)
+                        print(f"Backup file:{backup_name}")
+                        self.event.clear()
+                        self.task.clear()
+                        self.save()
         def save(self):
                 all_data = {
                         "Events": [event.to_dict() for event in CalEvent.CalEvent_list],
@@ -77,16 +91,17 @@ class CalManager:
                 print("="*30 + "\n")
         
         def search(self, keyword):
-                print(f"\n ---- {keyword} result ----")
+                print(f"\n ---- \"{keyword}\" results ----")
                 results_event = [item for item in self.event if keyword.lower() in item.title.lower()]
                 results_task = [item for item in self.task if keyword.lower() in item.title.lower()]
 
                 if not results_event and not results_task:
                         print("There is no any relevant result.")
-                else:
+                if results_event:
                         print("==== Events ====")
                         for i, item in enumerate(results_event):
                                 print(f"{i+1}: {item.title}")
+                if results_task:
                         print("==== Tasks ====")
                         for i, item in enumerate(results_task):
                                 print(f"{i+1}: {item.title}")
