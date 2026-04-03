@@ -11,7 +11,7 @@ while True:
                 title = input("Input title:")
                 description = input("Input description:")
                 custom_date = input("Input date:")
-                components.CalTask(title,description,custom_date)
+                components.CalTask(title,description,custom_date, uid=None)
                 manager.save()
         elif choice == '2':
                 title = input("Input title:")
@@ -19,7 +19,7 @@ while True:
                 custom_date = input("Input date:")
                 start_time = input("Start time:")
                 end_time = input("End time:")
-                components.CalEvent(title,description,custom_date, start_time,end_time)
+                components.CalEvent(title,description,custom_date, start_time,end_time,uid = None)
                 manager.save()
         elif choice == '4':
                 manager.show_item()

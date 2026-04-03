@@ -22,7 +22,7 @@ class CalManager:
                                                 description=item['description'],
                                                 custom_date=item['custom_date'],
                                                 start_time=item['start_time'],
-                                                end_time = item['item_date'],
+                                                end_time = item['end_time'],
                                                 uid = item['uid']
                                         )
                                 for item in dict.get('Tasks',[]):
@@ -66,13 +66,15 @@ class CalManager:
                 print("\n" + "="*30)
                 print("Calendar List")
                 print("="*30)
-                
+                i = 1 
                 print("\n[Events]")
                 for e in self.event:
-                        print(f"- {e.custom_date} | {e.title} | ({e.start_time} - {e.end_time})")
-                
+                        print(f"-{i} {e.custom_date} | {e.title} | ({e.start_time} - {e.end_time})")
+                        i += 1
+                i = 1 
                 print("\n[Task]")
                 for t in self.task:
                         status = "[x]" if t.is_completed else "[ ]"
-                        print(f"{status} {t.title} End: {t.custom_date}")
+                        print(f"-{i} {status} {t.title} End: {t.custom_date}")
+                        i += 1
                 print("="*30 + "\n")
