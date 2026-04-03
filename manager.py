@@ -75,3 +75,18 @@ class CalManager:
                         status = "[x]" if t.is_completed else "[ ]"
                         print(f"-{i+1} {status} {t.title} End: {t.custom_date}")
                 print("="*30 + "\n")
+        
+        def search(self, keyword):
+                print(f"\n ---- {keyword} result ----")
+                results_event = [item for item in self.event if keyword.lower() in item.title.lower()]
+                results_task = [item for item in self.task if keyword.lower() in item.title.lower()]
+
+                if not results_event and not results_task:
+                        print("There is no any relevant result.")
+                else:
+                        print("==== Events ====")
+                        for i, item in enumerate(results_event):
+                                print(f"{i+1}: {item.title}")
+                        print("==== Tasks ====")
+                        for i, item in enumerate(results_task):
+                                print(f"{i+1}: {item.title}")

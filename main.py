@@ -5,7 +5,7 @@ manager = manager.CalManager()
 manager.load()
 
 while True:
-        print("\n1.Add task 2. Add event 3.Check task 4. Show all items 5.Quit\n")
+        print("\n1.Add task 2. Add event 3.Check task 4. Show all items 5.Search q.Quit\n")
         choice = input("Option: ")
         if choice == '1':
                 title = input("Input title:")
@@ -34,5 +34,8 @@ while True:
         elif choice == '4':
                 manager.show_item()
         elif choice == '5':
+                keyword = input("Input your keyword:")
+                manager.search(keyword)
+        elif choice == 'q':
                 break
         
