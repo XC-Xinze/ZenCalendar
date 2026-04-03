@@ -32,7 +32,7 @@ class CalComponents:
 
 class CalEvent(CalComponents):
         CalEvent_list = []
-        def __init__(self, title, description, custom_date,  start_time, end_time,uid):
+        def __init__(self, title, description, custom_date,  start_time = None, end_time = None, uid = None):
                 super().__init__(title, description, custom_date,uid)
                 self.start_time = start_time
                 self.end_time = end_time

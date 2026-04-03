@@ -26,13 +26,13 @@ class CalManager:
                                                 uid = item['uid']
                                         )
                                 for item in dict.get('Tasks',[]):
-                                        CalTask(
+                                        temp_task = CalTask(
                                                 title=item['title'],
                                                 description=item['description'],
                                                 custom_date=item['custom_date'],
                                                 uid = item['uid'],
                                         )
-                                        item.is_completed = item['is_completed']
+                                        temp_task.is_completed = item['is_completed']
                                 print("Load Success")
                 except FileNotFoundError:
                         print("No Such file")
@@ -74,5 +74,5 @@ class CalManager:
                 print("\n[Task]")
                 for t in self.task:
                         status = "[x]" if t.is_completed else "[ ]"
-                        print(f"{status} {t.title} End: {t.custome_date}")
+                        print(f"{status} {t.title} End: {t.custom_date}")
                 print("="*30 + "\n")
