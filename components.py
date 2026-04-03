@@ -1,13 +1,15 @@
 import datetime
+from datetime import datetime
 import uuid
 
 class CalComponents:
-        def __init__(self, title, description, custom_date):
+        def __init__(self, title, description, custom_date = None, uid = None):
                 self.title = title
                 self.description = description
-                self.create_date = datetime.now()
+                self.create_date = datetime.today()
                 self.custom_date = custom_date
-                self.id = uuid.uuid4()
+                # load file will re-write uid so change it to the parameter
+                self.id = uid if uid else uuid.uuid4()
         
         def update_basic(self, new_title = None, new_description = None):
                 if new_title and new_title!= self.title:
@@ -30,8 +32,8 @@ class CalComponents:
 
 class CalEvent(CalComponents):
         CalEvent_list = []
-        def __init__(self, title, description, custom_date,  start_time, end_time):
-                super().__init__(title, description, custom_date)
+        def __init__(self, title, description, custom_date,  start_time, end_time,uid):
+                super().__init__(title, description, custom_date,uid)
                 self.start_time = start_time
                 self.end_time = end_time
                 CalEvent.CalEvent_list.append(self)
@@ -47,8 +49,8 @@ class CalEvent(CalComponents):
 
 class CalTask(CalComponents):
         CalTask_list = []
-        def __init__(self, title, description, custom_date):
-                super().__init__(title, description, custom_date)
+        def __init__(self, title, description, custom_date,uid):
+                super().__init__(title, description, custom_date,uid)
                 self.is_completed = False
                 CalTask.CalTask_list.append(self)
                 
