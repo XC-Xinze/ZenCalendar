@@ -66,15 +66,12 @@ class CalManager:
                 print("\n" + "="*30)
                 print("Calendar List")
                 print("="*30)
-                i = 1 
                 print("\n[Events]")
-                for e in self.event:
-                        print(f"-{i} {e.custom_date} | {e.title} | ({e.start_time} - {e.end_time})")
-                        i += 1
-                i = 1 
+                for i,e  in enumerate(self.event):
+                        print(f"-{i+1} {e.custom_date} | {e.title} | ({e.start_time} - {e.end_time})")
+
                 print("\n[Task]")
-                for t in self.task:
+                for i,t in enumerate(self.task):
                         status = "[x]" if t.is_completed else "[ ]"
-                        print(f"-{i} {status} {t.title} End: {t.custom_date}")
-                        i += 1
+                        print(f"-{i+1} {status} {t.title} End: {t.custom_date}")
                 print("="*30 + "\n")
