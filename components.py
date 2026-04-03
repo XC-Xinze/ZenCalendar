@@ -1,4 +1,5 @@
 import datetime
+import uuid
 
 class CalComponents:
         def __init__(self, title, description, custom_date):
@@ -6,6 +7,7 @@ class CalComponents:
                 self.description = description
                 self.create_date = datetime.now()
                 self.custom_date = custom_date
+                self.id = uuid.uuid4()
         
         def update_basic(self, new_title = None, new_description = None):
                 if new_title and new_title!= self.title:
@@ -22,7 +24,8 @@ class CalComponents:
                         "title": self.title,
                         "description": self.description,
                         "create_date": self.create_date.isoformat(),
-                        "custom_date": self.custom_date
+                        "custom_date": self.custom_date,
+                        "uid": str(self.id)
                 }
 
 class CalEvent(CalComponents):
@@ -48,7 +51,7 @@ class CalTask(CalComponents):
                 super().__init__(title, description, custom_date)
                 self.is_completed = False
                 CalTask.CalTask_list.append(self)
-        
+                
         def checkbox(self):
                self.is_completed = not self.is_completed
 
