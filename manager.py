@@ -71,11 +71,22 @@ class CalManager:
         def delete_id_item(self, item_list, item_id):
                 for item in item_list:
                         if str(item.id) == str(item_id):
-                                self.task.remove(item)
-                                self.save()
-                                return True
+                                sure = input("Do you really want to remove this item? y/n")
+                                while True:
+                                        #move statement out of loop
+                                        if sure == 'y' or sure == 'n':
+                                                break
+                                        else:
+                                                sure = input("Please input y or n:")               
+                                if sure == 'y':
+                                        item_list.remove(item)
+                                        self.save()
+                                        return True
+                                elif sure == 'n':
+                                        return False
+                print("No such item.")
                 return False
-                
+
         def show_item(self):
                 print("\n" + "="*30)
                 print("Calendar List")
@@ -89,7 +100,14 @@ class CalManager:
                         status = "[x]" if t.is_completed else "[ ]"
                         print(f"-{i+1} {status} {t.title} End: {t.custom_date}")
                 print("="*30 + "\n")
-        
+        def show_all_items(self):
+                self.temp_all_items = CalEvent.CalEvent_list + CalTask.CalTask_list
+
+                for i, item in enumerate(self.temp_all_items,1):
+                        tag = "[E]" if isinstance(item,CalEvent) else "[T]"
+                        print(f"{i} - {tag} {item.title}")
+
+                        
         def search(self, keyword):
                 print(f"\n ---- \"{keyword}\" results ----")
                 results_event = [item for item in self.event if keyword.lower() in item.title.lower()]

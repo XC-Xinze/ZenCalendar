@@ -18,7 +18,7 @@ manager = manager.CalManager()
 manager.load()
 
 while True:
-        print("\n1.Add task 2. Add event 3.Check task 4. Show all items 5.Search q.Quit\n")
+        print("\n1.Add task 2. Add event 3.Check task 4. Show all items 5.Search 6. Delete item q.Quit\n")
         choice = input("Option: ")
         if choice == '1':
                 title = input("Input title:")
@@ -49,6 +49,19 @@ while True:
         elif choice == '5':
                 keyword = input("Input your keyword:")
                 manager.search(keyword)
+        elif choice == '6':
+                manager.show_all_items()
+                try:
+                        idx = int(input("Choose the item you want to remove:")) - 1
+                        target = manager.temp_all_items[idx]
+                        if isinstance(target, components.CalEvent):
+                                manager.delete_id_item(components.CalEvent.CalEvent_list, target.id)
+                        else:
+                                manager.delete_id_item(components.CalTask.CalTask_list, target.id)
+                except IndexError:
+                        print("Wrong Index.")
+                except ValueError:
+                        print("Only numberic input.")
         elif choice == 'q':
                 break
         
