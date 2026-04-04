@@ -2,12 +2,14 @@ import sys
 from PyQt6.QtWidgets import QStackedWidget, QApplication, QPushButton, QVBoxLayout, QMainWindow, QHBoxLayout, QWidget
 import gui
 from gui import CalendarBaseDisplay, CalendarPage, CalendarTaskPage
-
+import manager
 class MainWindow(QMainWindow):
         def __init__(self, parent = None):
                 super().__init__(parent)
                 self.setWindowTitle("ZenCalendar 0.0.1(Gui start)")
                 self.resize(1000,600)
+                self.manager_gui = manager.CalManager()
+                self.manager_gui.load()
 
                 central_widget = QWidget()
                 self.setCentralWidget(central_widget)
@@ -26,8 +28,8 @@ class MainWindow(QMainWindow):
                 nav_layout.addStretch()
 
                 #main part for contents
-                self.task_side = CalendarTaskPage()
-                self.calendar_main = CalendarPage()
+                self.task_side = CalendarTaskPage(self.manager_gui)
+                self.calendar_main = CalendarPage(self.manager_gui)
 
                 self.main_layout.addWidget(self.nav_bar)
                 self.main_layout.addWidget(self.calendar_main, stretch=4)
