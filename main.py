@@ -1,11 +1,7 @@
-import components
-import manager
-import datetime
-from datetime import datetime, timedelta
-import zenmenu
+from backend import CalManager, ZenMenu
 
 
 if __name__ == "__main__":
-        m = manager.CalManager()
-        my_zen = zenmenu.ZenMenu(m)
+        m = CalManager()
+        my_zen = ZenMenu(m)
         my_zen.run_zen()
