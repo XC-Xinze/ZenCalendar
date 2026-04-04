@@ -30,7 +30,9 @@ class CalManager:
                                                 custom_date=item['custom_date'],
                                                 start_time=item['start_time'],
                                                 end_time = item['end_time'],
-                                                uid = item['uid']
+                                                uid = item['uid'],
+                                                linked_task=item.get("linked_task")
+
                                         )
                                 for item in dictdata.get('Tasks',[]):
                                         temp_task = CalTask(
@@ -38,6 +40,7 @@ class CalManager:
                                                 description=item['description'],
                                                 custom_date=item['custom_date'],
                                                 uid = item['uid'],
+                                                linked_event=item.get('linked_event')
                                         )
                                         temp_task.is_completed = item['is_completed']
                                 print("Load Success")
