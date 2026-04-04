@@ -1,4 +1,5 @@
 from PyQt6.QtWidgets import QListWidget, QLineEdit,QPushButton, QWidget, QGridLayout,QHBoxLayout, QVBoxLayout, QLabel, QFrame
+from PyQt6.QtWidgets import QMessageBox
 from PyQt6.QtCore import Qt
 import calendar
 from datetime import datetime
@@ -135,20 +136,50 @@ class CalendarTaskPage(CalendarBaseDisplay):
 
                 self.input_field = QLineEdit()
                 self.input_field.setPlaceholderText("Input task's contents...")
-
+                self.btn_enter = QPushButton("Enter")
+                self.btn_delete_task = QPushButton("Delete")
                 self.tasks_list_widget = QListWidget()
                 
                 layout = QVBoxLayout(self)
                 layout.addWidget(QLabel("Tasks list"))
                 layout.addWidget(self.input_field)
+                layout.addWidget(self.btn_enter)
                 layout.addWidget(self.tasks_list_widget)
+                layout.addWidget(self.btn_delete_task)
 
-   #             self.input_field.returnPressed.connect(self.add_task_to_logic)
+                self.tasks_list_widget.itemDoubleClicked.connect(self.toggle_task_status)
+                self.input_field.returnPressed.connect(self.add_task_to_list)
+                self.btn_enter.clicked.connect(self.add_task_to_list)
+                self.btn_delete_task.clicked.connect(self.delete_task)
+
  #               self.load_tasks_from_json()
 
                 self.setStyleSheet("background-color: #e0b0f0;border: 1px solid green;")
                 self.load_tasks_to_list()
-        
+        def delete_task(self):
+                row = self.tasks_list_widget.currentRow()
+                if row <0:
+                        return
+                target_task = self.manager_gui.task[row]
+                reply = QMessageBox.question(
+                        self,
+                        "Confirm Delete",
+                        f"Do you really want to delete this task?\n\n{target_task.title}",
+                        QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No,
+                        QMessageBox.StandardButton.No
+                        )
+                if reply == QMessageBox.StandardButton.Yes:
+                        self.manager_gui.task.remove(target_task)
+                        self.manager_gui.save()
+                        self.load_tasks_to_list()
+        def toggle_task_status(self, item):
+                row = self.tasks_list_widget.row(item)
+                target_task = self.manager_gui.task[row]
+
+                target_task.checkbox()
+                self.manager_gui.save()
+                self.load_tasks_to_list()
+
         def load_tasks_to_list(self):
                 self.tasks_list_widget.clear()
 
@@ -156,5 +187,18 @@ class CalendarTaskPage(CalendarBaseDisplay):
                         status = "[x]" if task.is_completed else "[ ]"
                         text = f"{status} - {task.title} | Due: {task.custom_date}"
                         self.tasks_list_widget.addItem(text)
-        def add_task_to_logic(self):
-                content = self.input_field.text()
+        def add_task_to_list(self):
+                title = self.input_field.text().strip()
+                if not title:
+                        return
+                today_str = datetime.now().strftime("%Y%m%d")
+                CalTask(
+                        title=title,
+                        description="",
+                        custom_date=today_str,
+                        uid=None
+                )
+
+                self.manager_gui.save()
+                self.load_tasks_to_list()
+                self.input_field.clear()
