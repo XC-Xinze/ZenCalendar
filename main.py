@@ -3,7 +3,6 @@ import manager
 import datetime
 from datetime import datetime, timedelta
 import zenmenu
-import pyqt6
 
 
 if __name__ == "__main__":
