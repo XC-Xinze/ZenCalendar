@@ -32,9 +32,10 @@ class CalComponents:
 
 class CalEvent(CalComponents):
         CalEvent_list = []
-        def __init__(self, title, description, custom_date,  start_time = None, end_time = None, uid = None):
+        def __init__(self, title, description, custom_date,  start_time = None, linked_task_id = None, end_time = None, uid = None):
                 super().__init__(title, description, custom_date,uid)
                 self.start_time = start_time
+                self.linked_task_id = linked_task_id
                 self.end_time = end_time
                 CalEvent.CalEvent_list.append(self)
 
@@ -42,6 +43,7 @@ class CalEvent(CalComponents):
                 temp_dict = super().to_dict()
                 temp_dict["start_time"] = self.start_time
                 temp_dict["end_time"] = self.end_time
+                temp_dict["linked_task_id"] = self.linked_task_id
                 return temp_dict
 
 
@@ -49,9 +51,10 @@ class CalEvent(CalComponents):
 
 class CalTask(CalComponents):
         CalTask_list = []
-        def __init__(self, title, description, custom_date,uid):
+        def __init__(self, title, description, custom_date,uid, linked_event_id = None):
                 super().__init__(title, description, custom_date,uid)
                 self.is_completed = False
+                self.linked_event_id = linked_event_id
                 CalTask.CalTask_list.append(self)
                 
         def checkbox(self):
@@ -60,4 +63,5 @@ class CalTask(CalComponents):
         def to_dict(self):
                 temp_dict = super().to_dict()
                 temp_dict["is_completed"] = self.is_completed
+                temp_dict["linked_event_id"] = self.linked_event_id
                 return temp_dict
