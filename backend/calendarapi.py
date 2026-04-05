@@ -37,8 +37,17 @@ class CalendarAPI:
             "data": new_task.to_dict()
         }
 
-    def delete_task(self):
-        return None
+    def delete_task(self, task_id):
+        success = self.manager.web_delete_id_item(self.manager.task,task_id)
+        if not success:
+            return {
+                "success": False,
+                "error": "This task is no longer exist"
+            }
+        return {
+            "success": True,
+            "message": "Task has been removed." 
+        }
 
     def check_task(self, task_id):
         target_task = self.manager.find_items_id(self.manager.task, task_id)
@@ -59,11 +68,41 @@ class CalendarAPI:
 
 # event operation
 
-    def create_event():
-        return None
+    def create_event(self, title, description = "",start_time=None, end_time = None, custom_date = None, uid = None,linked_task_id = None):
+        title = title.strip()
+        if not title:
+            return {
+                "success": False,
+                "error": "Title cannot be empty"
+            }
+        if custom_date is None:
+            custom_date = datetime.now().strftime("%Y%m%d")
+        new_event = CalEvent(
+            title=title,
+            description=description,
+            uid=uid,
+            start_time=start_time,
+            end_time=end_time,
+            custom_date=custom_date,
+            linked_task_id=linked_task_id
+        )
+        self.manager.save()
+        return {
+            "success": True,
+            "data": new_event.to_dict()
+        }
 
-    def delete_event():
-        return None
+    def delete_event(self, event_id):
+        success = self.manager.web_delete_id_item(self.manager.event,event_id)
+        if not success:
+            return {
+                "success": False,
+                "error": "This event is not exist"
+            }
+        return {
+            "success": True,
+            "message": "Event has been removed"
+        }
 
 
     

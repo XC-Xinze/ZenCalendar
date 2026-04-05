@@ -67,6 +67,13 @@ class CalManager:
                                 return item
                 return None
 
+        def web_delete_id_item(self, item_list, item_id):
+                for item in item_list:
+                        if str(item.id) == str(item_id):
+                                item_list.remove(item)
+                                self.save()
+                                return True
+                return False
 
         def delete_id_item(self, item_list, item_id):
                 for item in item_list:
@@ -108,6 +115,8 @@ class CalManager:
                         print(f"{i} - {tag} {item.title}")
 
                         
+ #maybe move checkbox() from Caltask to here -- tbc
+
         def search(self, keyword):
                 print(f"\n ---- \"{keyword}\" results ----")
                 results_event = [item for item in self.event if keyword.lower() in item.title.lower()]
