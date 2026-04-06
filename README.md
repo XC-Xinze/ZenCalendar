@@ -1,8 +1,8 @@
 # ZenCalendar
 
 # To-do 
-- add checkbox
-- add task delete function
+- [x] add checkbox
+- [x] add task delete function
 - minimal look for task
 - add description to task
 - add date for task

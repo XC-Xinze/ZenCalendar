@@ -16,5 +16,11 @@ window.apiBridge = {
             throw new Error("pywebview is not ready");
         }
         return await window.pywebview.api.check_task(task_id);
+    },
+    async deleteTask(task_id) {
+        if(!window.pywebview || !window.pywebview.api){
+            throw new Error("pywebview is not ready");
+        }
+        return await window.pywebview.api.delete_task(task_id);
     }
 };

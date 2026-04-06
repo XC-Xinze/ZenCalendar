@@ -20,14 +20,17 @@ function createTaskCard(task) {
           type="button">
           ${task.is_completed ? "D" : ""}
           </button>
-        <div class="flex-1">
-          <span class="px-2.5 py-0.5 rounded-full bg-primary-fixed text-on-primary-fixed-variant text-[10px] font-bold uppercase tracking-wider">
-        ${task.is_completed ? "Done" : "Task"}
-      </span>
-    <h3 class="${titleClass} mb-1">${task.title}</h3>
-    <p class="text-xs text-stone-500 leading-relaxed">Due: ${task.custom_date || "No date"}</p>
-    </div>
-    </div>
+          <div class="flex-1">
+            <span class="px-2.5 py-0.5 rounded-full bg-primary-fixed text-on-primary-fixed-variant text-[10px] font-bold uppercase tracking-wider">
+            ${task.is_completed ? "Done" : "Task"}
+            </span>
+            <h3 class="${titleClass} mb-1">${task.title}</h3>
+            <p class="text-xs text-stone-500 leading-relaxed">Due: ${task.custom_date || "No date"}</p>
+            <div class="flex">
+              <button class="delete-task-button">Delete</button>
+            </div>
+          </div>
+      </div>
     </div>
   `;
   const toggleBtn= card.querySelector(".task-toggle-btn");
@@ -35,15 +38,40 @@ function createTaskCard(task) {
     toggleBtn.addEventListener("click", async () => {
       await toggle_task(task.uid);
     });
+  const deleteBtn = card.querySelector(".delete-task-button");
+  if(deleteBtn) {
+    
+    deleteBtn.addEventListener("click", async () =>{
+      if(!confirm("Are you sure you want to delete this task?")) {
+        return;
+      }
+      await delete_task(task.uid);
+    });
+  }
   }
   return card;
+}
+
+async function delete_task(task_id) {
+  try {
+    const result = await window.apiBridge.deleteTask(task_id);
+    if (!result.success) {
+      alert(result.error || "Failed to delete");
+      return;
+    }
+    await renderTasks();
+  }
+  catch (error){
+    console.error("Failed to delete task",error);
+    alert("Failed to delete task");
+  }
 }
 
 async function handleAddTask() {
     const input = document.getElementById("task-input")
     if (!input) return;
 
-    const title = input.value.trim()
+    const title = input.value.trim();
     if (!title) return;
 
     try {
