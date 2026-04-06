@@ -10,5 +10,11 @@ window.apiBridge = {
             throw new Error("pywebview is not ready");
         }
         return await window.pywebview.api.create_task(title);
+    },
+    async toggleTask(task_id) {
+        if (!window.pywebview || !window.pywebview.api) {
+            throw new Error("pywebview is not ready");
+        }
+        return await window.pywebview.api.check_task(task_id);
     }
 };

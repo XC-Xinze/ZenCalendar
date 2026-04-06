@@ -10,14 +10,32 @@ function createTaskCard(task) {
 
   card.innerHTML = `
     <div class="flex justify-between items-start mb-2">
-      <span class="px-2.5 py-0.5 rounded-full bg-primary-fixed text-on-primary-fixed-variant text-[10px] font-bold uppercase tracking-wider">
+      <div class="flex items-start gap-3 flex-1">
+        <button 
+          class="task-toggle-btn mt-0.5 flex h-5 w-5 items-center justify-center
+          rounded border border-outline-variant bg-white text-primary transition
+          hover: bg-primary/5"
+          data-task-id="{$task.uid}"
+          aria-label="Task status"
+          type="button">
+          ${task.is_completed ? "D" : ""}
+          </button>
+        <div class="flex-1">
+          <span class="px-2.5 py-0.5 rounded-full bg-primary-fixed text-on-primary-fixed-variant text-[10px] font-bold uppercase tracking-wider">
         ${task.is_completed ? "Done" : "Task"}
       </span>
-    </div>
     <h3 class="${titleClass} mb-1">${task.title}</h3>
     <p class="text-xs text-stone-500 leading-relaxed">Due: ${task.custom_date || "No date"}</p>
+    </div>
+    </div>
+    </div>
   `;
-
+  const toggleBtn= card.querySelector(".task-toggle-btn");
+  if (toggleBtn) {
+    toggleBtn.addEventListener("click", async () => {
+      await toggle_task(task.uid);
+    });
+  }
   return card;
 }
 
@@ -54,11 +72,28 @@ function bindTaskAddBtn() {
     if (input) {
         input.addEventListener("keydown",async (event) => {
             if (event.key === "Enter") {
-                await handleAddTask;
+                await handleAddTask();
             }
         });
     }
 }
+
+async function toggle_task(task_id) {
+  try {
+    const result = await window.apiBridge.toggleTask(task_id);
+    if(!result.success){
+      alert(result.error || "Failed to update task status");
+      return;
+    }
+    await renderTasks();
+  } catch (error) {
+      console.error("Failed to update task status",error);
+      alert("Failed to update task status");
+    }
+  }
+   
+
+
 
 async function renderTasks() {
   const root = document.getElementById("task-list-root");
